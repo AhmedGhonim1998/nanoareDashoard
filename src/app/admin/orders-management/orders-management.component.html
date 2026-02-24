@@ -1,0 +1,119 @@
+<div class="admin-container">
+  <header class="admin-header">
+    <div class="header-title">
+      <h1>إدارة الطلبات <small>(Orders Management)</small></h1>
+      <p>عرض وتحكم في جميع طلبات العملاء من قاعدة البيانات</p>
+    </div>
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="loadOrders()">🔄 تحديث البيانات</button>
+      <button (click)="logout()" class="logout-btn">
+        تسجيل الخروج <i class="fa fa-sign-out"></i>
+      </button>
+    </div>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon total-orders">📊</div>
+      <div class="stat-info">
+        <h3>إجمالي الطلبات</h3>
+        <span>{{ orders.length }}</span>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon total">💰</div>
+      <div class="stat-info">
+        <h3>إجمالي المبيعات</h3>
+        <span>{{ getTotalSales() | currency:'EGP':'symbol':'1.0-0' }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon customer">👤</div>
+      <div class="stat-info">
+        <h3>عملاء نشطون</h3>
+        <span>{{ orders.length > 0 ? (orders.length | number) : 0 }}</span>
+      </div>
+    </div>
+  </div>
+
+
+
+  
+
+  <div class="search-container">
+      <div class="search-wrapper">
+        <i class="fa fa-search search-icon"></i>
+        <input 
+          type="text" 
+          #searchInput
+          (input)="onSearch(searchInput.value)" 
+          placeholder="ابحث برقم الطلب، الإيميل، أو اسم العميل..."
+          class="admin-search-input"
+        />
+      </div>
+  </div>
+  <div class="table-container">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>رقم الطلب</th>
+          <th>العميل</th>
+          <th>التاريخ</th>
+          <th>الإجمالي</th>
+          <th>تفاصيل الشحن</th>
+          <th>حالة الطلب</th> </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>
+            <span class="order-id" *ngIf="order.id">#{{ order.id.slice(-6) }}</span>
+          </td>
+
+          <td>
+            <div class="customer-info">
+              <strong>{{ order.shippingDetails?.firstName }} {{ order.shippingDetails?.lastName }}</strong>
+              <br>
+              <small class="text-muted">{{ order.customerEmail }}</small>
+            </div>
+          </td>
+
+          <td>{{ order.orderDate | date:'dd/MM/yyyy' }}</td>
+
+          <td class="price">{{ order.totalPrice | currency:'EGP':'symbol':'1.0-0' }}</td>
+
+          <td>
+            <div class="shipping-info">
+              <small>{{ order.shippingDetails?.address }}</small>
+              <br>
+              <small *ngIf="order.shippingDetails?.extraMessage" class="extra-note">
+                📝 {{ order.shippingDetails?.extraMessage }}
+              </small>
+            </div>
+          </td>
+
+          <td>
+            <select 
+              [value]="order.status" 
+              (change)="onStatusChange(order.id, $event)"
+              [ngClass]="'status-select ' + (order.status?.toLowerCase() || 'pending')">
+              <option value="Pending">🟡 قيد الانتظار</option>
+              <option value="Shipped">🔵 تم الشحن</option>
+              <option value="Delivered">🟢 تم التسليم</option>
+              <option value="Canceled">🔴 ملغي</option>
+            </select>
+          </td>
+        </tr>
+
+        <tr *ngIf="orders.length === 0">
+          <td colspan="6" style="text-align: center; padding: 3rem;">
+            <div class="no-data">
+              <p>جاري تحميل الطلبات أو لا يوجد طلبات حالياً...</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
