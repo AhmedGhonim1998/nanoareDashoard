@@ -18,7 +18,7 @@ export class LoginComponent {
   constructor(private http: HttpClient, private router: Router) {}
 
   onLogin() {
-    this.http.post('https://localhost:44353/api/admin/auth/login', this.loginData)
+    this.http.post('https://api.nanocareegypt.com/api/admin/auth/login', this.loginData)
       .subscribe({
         next: (res: any) => {
           // حفظ التوكن في المتصفح
