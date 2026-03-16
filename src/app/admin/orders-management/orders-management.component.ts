@@ -15,6 +15,7 @@ export class OrdersManagementComponent implements OnInit {
   orders: any[] = [];      // دي اللي معروضة في الـ HTML حالياً
 allOrders: any[] = [];     // 👈 دي النسخة الأصلية اللي هنرجع لها دايماً
 searchTerm: string = '';
+
   constructor(private orderService: OrderService, private router: Router) {}
 
   ngOnInit() {
@@ -53,9 +54,10 @@ onSearch(term: string) {
       const shipping = order?.shippingDetails;
       const fName = String(shipping?.firstName || '').toLowerCase();
       const lName = String(shipping?.lastName || '').toLowerCase();
+      const phone = String(shipping?.phoneNumber || '').toLowerCase();
 
       // دمجهم في نص واحد للبحث الشامل
-      const searchPool = `${id} ${email} ${fName} ${lName}`;
+      const searchPool = `${id} ${email} ${fName} ${lName} ${phone}`; 
 
       return searchPool.includes(normalizedTerm);
 

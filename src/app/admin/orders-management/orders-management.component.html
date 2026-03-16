@@ -63,6 +63,7 @@
           <th>التاريخ</th>
           <th>الإجمالي</th>
           <th>تفاصيل الشحن</th>
+          <th>رقم الهاتف</th>
           <th>حالة الطلب</th> </tr>
       </thead>
       <tbody>
@@ -94,6 +95,10 @@
           </td>
 
           <td>
+            <small>{{ order.shippingDetails?.phoneNumber || '—' }}</small>
+          </td>
+
+          <td>
             <select 
               [value]="order.status" 
               (change)="onStatusChange(order.id, $event)"
@@ -107,7 +112,7 @@
         </tr>
 
         <tr *ngIf="orders.length === 0">
-          <td colspan="6" style="text-align: center; padding: 3rem;">
+          <td colspan="7" style="text-align: center; padding: 3rem;">
             <div class="no-data">
               <p>جاري تحميل الطلبات أو لا يوجد طلبات حالياً...</p>
             </div>
